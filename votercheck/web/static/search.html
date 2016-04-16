@@ -1,0 +1,151 @@
+<HTML>
+<HEAD>
+<TITLE>SEARCH</TITLE>
+
+  <STYLE>
+    body, html {
+      margin: 0px;
+      padding: 0px;
+      font-family: 'helvetica';
+    }
+
+    body {
+      background-color: white;
+    }
+
+    .search-page {
+      width: 100%;
+      height: 100%;
+      display: relative;
+    }
+
+    .search-page .search-bar {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      height: 60px;
+      line-height: 60px;
+      padding-left: 20px;
+      background-color: #ccccff;
+    }
+
+    .search-page .search-results {
+      position: absolute;
+      top: 80px;
+      bottom: 10px;
+      right: 10px;
+      left: 10px;
+    }
+
+    .search-results .result {
+      position: relative;
+      font-size: 14px;
+      line-height: 16px;
+      font-weight: normal;
+    }
+
+    .search-results .result.even {
+      background-color: #ffffff;
+    }
+
+    .search-results .result.odd {
+      background-color: #eeeeee;
+    }
+
+    .search-results .result-header {
+      position: relative;
+      font-size: 14px;
+      line-height: 16px;
+      font-weight: bold;
+    }
+
+    .search-results .result-field {
+      position: relative;
+      display: inline-block;
+      line-height: inherit;
+      font-weight: inherit;
+      width: 60px;
+      padding-left: 10px;
+      padding-right: 10px;
+      overflow: hidden;
+      vertical-align: top;
+    }
+
+    .search-results .result-field.last_name {
+      width: 160px;
+    }
+
+    .search-results .result-field.first_name {
+      width: 160px;
+    }
+
+    .search-results .result-field.middle_name {
+      width: 20px;
+    }
+
+    .search-results .result-field.dob {
+      width: 60px;
+    }
+
+    .search-results .result-field.zip {
+      width: 60px;
+    }
+
+    .search-results .result-field.status {
+      width: 50px;
+    }
+
+    .search-results .result-field.party {
+      width: 60px;
+    }
+
+    .search-results .result-field.application_date {
+      width: 60px;
+    }
+
+    .search-results .result-field.application_source {
+      width: 50px;
+    }
+  </STYLE>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/results.js"></script>
+  <script src="/js/search.js"></script>
+  <script>
+    (function() {
+      $(document).ready(function() {
+        var api = new Api();
+        var currentRequest;
+
+        var searcher = new Searcher($('.search-bar'), function(searchText) {
+          var results = new Results($('.search-results'));
+
+          var thisRequest = currentRequest = api.search(searchText, function(resultDatas) {
+            if (thisRequest != currentRequest)
+              return;
+
+            if (!!resultDatas) {
+              results.showResults(resultDatas);
+            }
+            else {
+              results.showError();
+            }
+          });
+        });
+      });
+    })();
+  </script>
+</HEAD>
+<BODY>
+  <div class="search-page">
+    <div class="search-bar">
+      <input type="text">
+      <button>SEARCH</button>
+    </div>
+    <div class="search-results">
+    </div>
+  </div>
+</BODY>
+</HTML>
