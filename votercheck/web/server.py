@@ -2,6 +2,10 @@ from flask import Flask, send_from_directory
 from flask_restful import Resource, Api
 import sqlite3
 
+
+SEARCH_LIMIT = 50
+
+
 class SearchApp(object):
     def __init__(self, db_conn_creator):
         self.app = Flask(__name__)
@@ -44,7 +48,8 @@ class SearchApp(object):
                     results = [r for r in results if all(p.upper() == r['first_name'] or p.upper() == r['last_name'] for p in parts)]
 
                 return {"query": query,
-                        "matches": results}
+                        "matches": results[:SEARCH_LIMIT],
+                        "count": len(results)}
 
         self.api.add_resource(Voters, '/voters/<string:query>')
 

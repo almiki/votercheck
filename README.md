@@ -15,4 +15,4 @@ To only import 1000 records (for testing or whatever):
 Run web/server.py, passing it the SQLite database file:
 > python server.py --db=/path/to/voterdata.db --port=1234
 
-You probably have to run this from the /votercheck folder.
+You probably have to run this from the /votercheck/web folder.

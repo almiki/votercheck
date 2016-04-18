@@ -54,6 +54,12 @@ var Results = function(resultsElement) {
       });
       resultsElement.append(resultDiv);
     });
+
+    if (resultDatas.count > resultDatas.matches.length) {
+      var resultDiv = $('<div class="result"></div>')
+      resultDiv.text("Showing " + resultDatas.matches.length + " / " + resultDatas.count);
+      resultsElement.append(resultDiv);
+    }
   };
 
   this.showError = function() {
