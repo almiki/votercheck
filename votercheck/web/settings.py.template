@@ -1,0 +1,4 @@
+# Template for the required settings.py file
+
+port = 1234
+db = "/home/ubuntu/mydb.db"
