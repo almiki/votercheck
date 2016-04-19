@@ -12,26 +12,27 @@ var Results = function(resultsElement) {
     }
 
     if (resultDatas.matches.length == 0) {
-      resultsElement.text('No matches for "' + resultDatas.query + '"');
+      resultsElement.text('No matches found');
       return;
     }
-
 
     var fields = [['last_name', 'Last Name'],
                   ['middle_name', 'M'],
                   ['first_name', 'First Name'],
-                  ['dob', "Date of Birth"],
                   ['zip', 'Zip Code'],
                   ['status', 'Status'],
-                  ['party', 'Party'],
-                  ['application_date', 'App Date'],
-                  ['application_source', 'App Source']];
+                  ['status_why', 'Status Reason'],
+                  ['purged', 'Purged Date', 'date'],
+                  ['inactive', 'Inactive Date', 'date']];
 
     var header = $('<div class="result-header"></div>');
     fields.forEach(function(i) {
       var field = $('<div class="result-field"/>');
       field.text(i[1]);
       field.addClass(i[0]);
+      for (var extra = 2; extra < i.length; extra++) {
+        field.addClass(i[extra]);
+      }
       header.append(field);
     });
     resultsElement.append(header);
@@ -46,6 +47,11 @@ var Results = function(resultsElement) {
       fields.forEach(function(i) {
         var field = $('<div class="result-field"/>');
         field.addClass(i[0]);
+
+        for (var extra = 2; extra < i.length; extra++) {
+          field.addClass(i[extra]);
+        }
+
         var span = $('<span/>');
         span.attr('title', i[1] + ': ' + data[i[0]]);
         span.text(data[i[0]]);

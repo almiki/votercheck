@@ -6,6 +6,19 @@ import sqlite3
 SEARCH_LIMIT = 50
 
 
+def _prettyfy_date(d):
+    year = d[:4]
+    month = d[4:6]
+    day = d[6:]
+    return "{}/{}/{}".format(year, month, day)
+
+
+def _strip(s):
+    if not s:
+        return ''
+    return s.strip()
+
+
 class SearchApp(object):
     def __init__(self, db_conn_creator):
         self.app = Flask(__name__)
@@ -21,37 +34,33 @@ class SearchApp(object):
 
                 self.db_conn = app.db_conn
 
-            def get(self, query):
+            def get(self, last, first, middle, zipcode, dob):
                 c = self.db_conn.cursor()
 
-                print("GET query: {}".format(query))
+                first = first.strip().upper()
+                last = last.strip().upper()
+                middle = middle.strip().upper()
 
-                parts = [p for p in query.replace(',', ' ').split(' ') if p]
-                results = []
+                print("GET query: {}".format(",".join([last, first, middle, zipcode, dob])))
 
-                if parts:
-                    longest_part = max(parts, key=lambda p: len(p))
+                c.execute("SELECT zip_code, voter_status, status_reason, purged_date, inactive_date, middle_name FROM voters WHERE first_name=? AND last_name=? AND zip_code=? AND DOB=?",
+                          (first, last, zipcode[:5], dob))
+                results = [{"first_name": first,
+                            "last_name": last,
+                            "middle_name": middle[:1],
+                            "dob": _prettyfy_date(dob),
+                            "zip": zip_code,
+                            "status": _strip(status),
+                            "status_why": _strip(status_reason) if _strip(status_reason) else 'NA',
+                            "purged": _prettyfy_date(purged_date) if purged_date else 'NA',
+                            "inactive": _prettyfy_date(inactive_date) if inactive_date else 'NA'}
+                           for zip_code, status, status_reason, purged_date, inactive_date, middle_name in c.fetchall()
+                           if (not middle_name) or (middle and middle[0] == middle_name[0])]
 
-                    c.execute("SELECT id, first_name, middle_name, last_name, zip_code, DOB, voter_status, political_party, other_party, application_date, application_source FROM voters WHERE first_name=? OR last_name=?", (longest_part.upper(), longest_part.upper()))
-                    results = [{"id": i,
-                                "first_name": first,
-                                "last_name": last,
-                                "middle_name": middle[:1],
-                                "dob": dob,
-                                "zip": zip_code,
-                                "status": status,
-                                "party": party + ('' if not party2 else "({})".format(party2)),
-                                "party2": party2,
-                                "application_date": app_date,
-                                "application_source": app_source}
-                               for i, first, middle, last, zip_code, dob, status, party, party2, app_date, app_source in c.fetchall()]
-                    results = [r for r in results if all(p.upper() == r['first_name'] or p.upper() == r['last_name'] for p in parts)]
-
-                return {"query": query,
-                        "matches": results[:SEARCH_LIMIT],
+                return {"matches": results[:SEARCH_LIMIT],
                         "count": len(results)}
 
-        self.api.add_resource(Voters, '/voters/<string:query>')
+        self.api.add_resource(Voters, '/voterapi/search/<string:last>/<string:first>/<string:middle>/<string:zipcode>/<string:dob>')
 
         @self.app.route('/search.html')
         def search_page():

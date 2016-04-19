@@ -55,7 +55,7 @@ fields = (
     None, # Mailing Address 2
     None, # Mailing Address 3
     None, # Mailing Address 4
-    FieldParser("DOB"), # DOB YYYYMMDD
+    FieldParser("DOB", indexed=True), # DOB YYYYMMDD
     None, # Gender (M/F)
     FieldParser("political_party"), # Political Party (DEM, REP, CON, GRE, WOR, IND, WEP, SCC, OTH, BLK)
 
@@ -84,10 +84,10 @@ fields = (
     FieldParser("voter_status"), # Voter Status Codes (A, AM, AF, AP, AU, I, P, 17)
 
     # 41
-    None, # Status Reason Codes
-    None, # Date Voter Made Inactive (YYYYMMDD)
-    None, # Date voter was purged (YYYYMMDD)
-    None, # Unique NYS Voter ID
+    FieldParser("status_reason"), # Status Reason Codes
+    FieldParser("inactive_date"), # Date Voter Made Inactive (YYYYMMDD)
+    FieldParser("purged_date"), # Date voter was purged (YYYYMMDD)
+    FieldParser("voter_id"), # Unique NYS Voter ID
     None, # Voter History (semicolon separated)
 )
 

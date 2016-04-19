@@ -20,22 +20,75 @@
     }
 
     .search-page .search-bar {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      height: 60px;
-      line-height: 60px;
+      position: relative;
+      padding-top: 20px;
+      padding-bottom: 20px;
       padding-left: 20px;
       background-color: #ccccff;
     }
 
-    .search-page .search-results {
+    .search-page .search-bar .search-name, .search-zip, .search-dob {
+      position: relative;
+      line-height: 28px;
+      padding-left: 120px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .search-page .search-bar .search-form button {
       position: absolute;
-      top: 80px;
-      bottom: 10px;
-      right: 10px;
-      left: 10px;
+      bottom: 4px;
+      right: 0px;
+      width: 100px;
+    }
+
+    .search-page .search-bar .search-form {
+      display: inline-block;
+      position: relative;
+    }
+
+    .search-page .search-bar span {
+      position: absolute;
+      left: 0px;
+      top: 4px;
+      height: 28px;
+      line-height: 28px;
+    }
+
+    .search-page .search-bar input {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .search-page .search-bar .search-name input.middle {
+      width: 30px;
+    }
+
+    .search-page .search-bar .search-name input.first, input.last {
+      width: 180px;
+    }
+
+    .search-page .search-bar .search-zip input.zip {
+      width: 80px;
+    }
+
+    .search-page .search-bar .search-dob input.year {
+      width: 80px;
+    }
+
+    .search-page .search-bar .search-dob input.day {
+      width: 100px;
+    }
+
+    .search-page .search-bar input, select, button {
+      height: 28px;
+      font-size: 14px;
+    }
+
+    .search-page .search-results {
+      position: relative;
+      padding: 10px;
     }
 
     .search-results .result {
@@ -72,6 +125,10 @@
       vertical-align: top;
     }
 
+    .search-results .result-field.date {
+      width: 80px;
+    }
+
     .search-results .result-field.last_name {
       width: 160px;
     }
@@ -84,28 +141,16 @@
       width: 20px;
     }
 
-    .search-results .result-field.dob {
-      width: 60px;
-    }
-
     .search-results .result-field.zip {
       width: 60px;
     }
 
     .search-results .result-field.status {
-      width: 50px;
-    }
-
-    .search-results .result-field.party {
       width: 60px;
     }
 
-    .search-results .result-field.application_date {
-      width: 60px;
-    }
-
-    .search-results .result-field.application_source {
-      width: 50px;
+    .search-results .result-field.status_why {
+      width: 80px;
     }
   </STYLE>
 
@@ -119,10 +164,10 @@
         var api = new Api();
         var currentRequest;
 
-        var searcher = new Searcher($('.search-bar'), function(searchText) {
+        var searcher = new Searcher($('.search-bar'), function(searchInfo) {
           var results = new Results($('.search-results'));
 
-          var thisRequest = currentRequest = api.search(searchText, function(resultDatas) {
+          var thisRequest = currentRequest = api.search(searchInfo, function(resultDatas) {
             if (thisRequest != currentRequest)
               return;
 
@@ -141,8 +186,38 @@
 <BODY>
   <div class="search-page">
     <div class="search-bar">
-      <input type="text">
-      <button>SEARCH</button>
+      <div class="search-form">
+        <div class="search-name">
+          <span>Full Name:</span>
+          <input type="text" placeholder="First Name" class="first">
+          <input type="text" placeholder="M" class="middle" maxlength="1">
+          <input type="text" placeholder="Last Name" class="last">
+        </div>
+        <div class="search-zip">
+          <span>Zip Code:</span>
+          <input type="text" placeholder="Zip Code" class="zip" maxlength="5">
+        </div>
+        <div class="search-dob">
+          <span>Date of Birth:</span>
+          <input type="text" placeholder="Year" class="year" maxlength="4">
+          <select class="month">
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input type="text" placeholder="Day (1-31)" class="day" maxlength="2">
+        </div>
+        <button>SEARCH</button>
+      </div>
     </div>
     <div class="search-results">
     </div>
