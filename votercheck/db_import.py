@@ -144,7 +144,13 @@ def import_file(fname, db_conn, max_allowed=-1):
     row_count = 0
 
     lcount = 0
+    output_interval = 50000
+    next_output = output_interval
     for line in f:
+        if lcount >= next_output:
+            print("Processed {}".format(lcount))
+            next_output += output_interval
+
         lcount += 1
 
         if not line:
