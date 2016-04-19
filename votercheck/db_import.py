@@ -142,12 +142,9 @@ def import_file(fname, db_conn, max_allowed=-1):
     f = open(fname)
 
     row_count = 0
-    # Loads everything into RAM at once
-    lines = f.readlines()
-    f.close()
 
     lcount = 0
-    for line in lines:
+    for line in f:
         lcount += 1
 
         if not line:
@@ -194,6 +191,8 @@ def import_file(fname, db_conn, max_allowed=-1):
 
         if max_allowed >= 0 and row_count >= max_allowed:
             break
+
+    f.close()
 
     db_conn.commit()
 
