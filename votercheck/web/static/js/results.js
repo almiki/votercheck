@@ -1,9 +1,9 @@
 
 var Results = function(resultsElement) {
   resultsElement.html('');
-  resultsElement.text("Searching...");
+  resultsElement.html("<p>Searching...</p>");
 
-  this.showResults = function(resultDatas) {
+  this.showResults = function(resultDatas, searchInfo) {
     resultsElement.html('');
 
     if (!resultDatas.matches) {
@@ -11,10 +11,26 @@ var Results = function(resultsElement) {
       return;
     }
 
+    var appendHelpText = function() {
+      var p = $('<p><i></i></p>');
+      p.find('i').text("If your voter registration has been changed without your approval, you can still vote. There will be a judge on April 19th granting disenfranchised voters the right to vote.  Screenshot this page and use it as evidence in addition to other evidence gathered. If you are not granted an official ballot, it is very important that you cast a provisional ballot.");
+      resultsElement.append(p);
+    };
+
     if (resultDatas.matches.length == 0) {
-      resultsElement.text('No matches found. If your voter registration has been changed without your approval, you can still vote. There will be a judge on April 19th granting disenfranchised voters the right to vote.  Screenshot this page and use it as evidence in addition to other evidence gathered. If you are not granted an official ballot, it is very important that you cast a provisional ballot.');
-      resultsElement.append('<p>');
-      resultsElement.append(document.createTextNode("Make sure to enter all your information correctly."));
+      var searchText = '';
+      searchText += searchInfo.first;
+      if (searchInfo.middle) {
+        searchText += " " + searchInfo.middle;
+      }
+      searchText += " " + searchInfo.last;
+      searchText += ", " + searchInfo.zip;
+      searchText += ", " + searchInfo.year + "/" + searchInfo.month + "/" + searchInfo.day;
+
+      var p = $("<p/>");
+      p.text('No matches found for "' + searchText + '".');
+      resultsElement.append(p);
+      appendHelpText();
       return;
     }
 
@@ -71,9 +87,14 @@ var Results = function(resultsElement) {
       disclaimerDiv.text("If your voter registration has been changed without your approval, you can still vote. There will be a judge on April 19th granting disenfranchised voters the right to vote.  Screenshot this page and use it as evidence in addition to other evidence gathered. If you are not granted an official ballot, it is very important that you cast a provisional ballot.");
       resultsElement.append(disclaimerDiv);
     }
+
+    appendHelpText();
   };
 
-  this.showError = function() {
-    resultsElement.text("Error");
+  this.showError = function(error) {
+    var p = $('<p/>');
+    p.text(error || "Error");
+    resultsElement.html('');
+    resultsElement.append(p);
   };
 };

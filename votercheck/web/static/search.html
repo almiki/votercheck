@@ -65,7 +65,7 @@
       text-shadow: 1px 1px rgba(0, 102, 186, 0.3);
     }
 
-    .search-page .search-bar .search-name, .search-zip, .search-dob {
+    .search-page .search-bar .search-form .section {
       position: relative;
       line-height: 28px;
       padding-left: 140px;
@@ -73,9 +73,34 @@
       padding-bottom: 4px;
     }
 
+    .search-page .search-bar .search-form .section span {
+      position: absolute;
+      left: 0px;
+      top: 4px;
+      height: 28px;
+      line-height: 28px;
+      width: 130px;
+      text-align: right;
+      font-weight: semi-bold;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search-page .search-bar .search-form .disclaimer {
+      position: relative;
+      left: 0px;
+      top: 4px;
+      height: 28px;
+      line-height: 28px;
+      text-align: right;
+      color: white;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
     .search-page .search-bar .search-form button {
       position: absolute;
-      bottom: 4px;
+      bottom: 32px;
       right: 0px;
       padding-right: 16px;
       padding-left: 16px;
@@ -95,19 +120,6 @@
       display: inline-block;
       position: relative;
       overflow: visible;
-    }
-
-    .search-page .search-bar .search-form span {
-      position: absolute;
-      left: 0px;
-      top: 4px;
-      height: 28px;
-      line-height: 28px;
-      width: 130px;
-      text-align: right;
-      font-weight: semi-bold;
-      color: white;
-      font-size: 16px;
     }
 
     .search-page .search-bar input {
@@ -148,6 +160,12 @@
       font-size: 14px;
     }
 
+    .search-results p {
+      margin-top: 24px;
+      margin-left: 24px;
+      margin-right: 24px;
+    }
+
     .search-results .result {
       position: relative;
       font-size: 14px;
@@ -157,11 +175,11 @@
     }
 
     .search-results .result.even {
-      background-color: #ffffff;
+      background-color: #eeeeee;
     }
 
     .search-results .result.odd {
-      background-color: #eeeeee;
+      background-color: #f9f9f9;
     }
 
     .search-results .result-header {
@@ -229,6 +247,11 @@
 
           var results = new Results($('.search-results'));
 
+          if (searchInfo.errors) {
+            results.showError(searchInfo.errors);
+            return;
+          }
+
           var thisRequest = currentRequest = api.search(searchInfo, function(resultDatas) {
             if (thisRequest != currentRequest)
               return;
@@ -236,7 +259,7 @@
             currentRequest = null;
 
             if (!!resultDatas) {
-              results.showResults(resultDatas);
+              results.showResults(resultDatas, searchInfo);
             }
             else {
               results.showError();
@@ -256,21 +279,18 @@
       <div>
         <h2>Enter your personal details below and click the "SEARCH" button.</h2>
       </div>
-      <div>
-        <h2>**Voter information reflects the NY Board of Elections data as of April 6th, 2016</h2>
-      </div>
       <div class="search-form">
-        <div class="search-name">
+        <div class="search-name section">
           <span>Full Name:</span>
           <input type="text" placeholder="First Name" class="first">
           <input type="text" placeholder="M" class="middle" maxlength="1">
           <input type="text" placeholder="Last Name" class="last">
         </div>
-        <div class="search-zip">
+        <div class="search-zip section">
           <span>Zip Code:</span>
           <input type="text" placeholder="Zip Code" class="zip" maxlength="5">
         </div>
-        <div class="search-dob">
+        <div class="search-dob section">
           <span>Date of Birth:</span>
           <input type="text" placeholder="Year" class="year" maxlength="4">
           <select class="month">
@@ -290,6 +310,7 @@
           <input type="text" placeholder="Day (1-31)" class="day" maxlength="2">
         </div>
         <button>SEARCH</button>
+        <div class="disclaimer"><span>**Voter information reflects the NY Board of Elections data as of April 6th, 2016</span></div>
       </div>
     </div>
     <div class="search-results">
