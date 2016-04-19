@@ -12,7 +12,9 @@ var Results = function(resultsElement) {
     }
 
     if (resultDatas.matches.length == 0) {
-      resultsElement.text('No matches found');
+      resultsElement.text('No matches found.');
+      resultsElement.append('<p>');
+      resultsElement.append(document.createTextNode("Make sure to enter all your information correctly."));
       return;
     }
 

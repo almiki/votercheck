@@ -43,18 +43,18 @@ class SearchApp(object):
 
                 print("GET query: {}".format(",".join([last, first, middle, zipcode, dob])))
 
-                c.execute("SELECT zip_code, voter_status, status_reason, purged_date, inactive_date, middle_name FROM voters WHERE first_name=? AND last_name=? AND zip_code=? AND DOB=?",
+                c.execute("SELECT first_name, last_name, middle_name, zip_code, voter_status, status_reason, purged_date, inactive_date FROM voters WHERE first_name=? AND last_name=? AND zip_code=? AND DOB=?",
                           (first, last, zipcode[:5], dob))
-                results = [{"first_name": first,
-                            "last_name": last,
-                            "middle_name": middle[:1],
+                results = [{"first_name": first_name,
+                            "last_name": last_name,
+                            "middle_name": middle_name[:1],
                             "dob": _prettyfy_date(dob),
                             "zip": zip_code,
                             "status": _strip(status),
                             "status_why": _strip(status_reason) if _strip(status_reason) else 'NA',
                             "purged": _prettyfy_date(purged_date) if purged_date else 'NA',
                             "inactive": _prettyfy_date(inactive_date) if inactive_date else 'NA'}
-                           for zip_code, status, status_reason, purged_date, inactive_date, middle_name in c.fetchall()
+                           for first_name, last_name, middle_name, zip_code, status, status_reason, purged_date, inactive_date, in c.fetchall()
                            if (not middle_name) or (middle and middle[0] == middle_name[0])]
 
                 return {"matches": results[:SEARCH_LIMIT],
