@@ -70,6 +70,10 @@ class SearchApp(object):
         def send_js(p):
             return send_from_directory('static/js', p)
 
+        @self.app.route('/images/<path:p>')
+        def send_images(p):
+            return send_from_directory('static/images', p)
+
     def start(self, port, debug=False):
         self.app.run(port=port, debug=debug)
 
