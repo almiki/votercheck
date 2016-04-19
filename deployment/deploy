@@ -1,0 +1,17 @@
+apt-get update
+apt-get -y install git python-dev python-pip nginx
+
+pip install uwsgi
+pip install flask
+pip install flask_restful
+
+cp nginx.conf /etc/nginx/.
+chmod 644 /etc/nginx/nginx.conf
+
+# Need to copy Democrats.db
+
+cp votercheck.conf /etc/init/.
+chmod 644 /etc/init/votercheck.conf
+
+service restart nginx
+service start votercheck
