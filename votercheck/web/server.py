@@ -74,6 +74,10 @@ class SearchApp(object):
         def send_images(p):
             return send_from_directory('static/images', p)
 
+        @self.app.route('/health')
+        def health():
+            return "OK"
+
     def start(self, port, debug=False):
         self.app.run(port=port, debug=debug)
 
