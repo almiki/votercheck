@@ -5,10 +5,14 @@ pip install uwsgi
 pip install flask
 pip install flask_restful
 
+# Dumb, this configuration should probably be in the upstart script
+cp settings.py /home/ubuntu/votercheck/votercheck/web/.
+
 cp nginx.conf /etc/nginx/.
 chmod 644 /etc/nginx/nginx.conf
 
-# Need to copy Democrats.db
+# Need to copy voters.db
+# scp ubuntu@<other_instance>:voters.db .
 
 cp votercheck.conf /etc/init/.
 chmod 644 /etc/init/votercheck.conf
