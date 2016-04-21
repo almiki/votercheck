@@ -240,19 +240,20 @@
         var api = new Api();
         var currentRequest;
 
+        var results = new Results($('.search-results'));
         var searcher = new Searcher($('.search-bar'), function(searchInfo) {
           if (currentRequest) {
             return;
           }
 
-          var results = new Results($('.search-results'));
+          results.showSearching();
 
           if (searchInfo.errors) {
             results.showError(searchInfo.errors);
             return;
           }
 
-          var thisRequest = currentRequest = api.search(searchInfo, function(resultDatas) {
+          var resultsCallback = function(resultDatas) {
             if (thisRequest != currentRequest)
               return;
 
@@ -264,7 +265,9 @@
             else {
               results.showError();
             }
-          });
+          };
+
+          var thisRequest = currentRequest = !searchInfo.equals(results.getDisplayedSearchInfo()) ? api.search(searchInfo, resultsCallback) : {t: setTimeout(function() {resultsCallback(results.getDisplayedResults())}, 200)};
         });
       });
     })();

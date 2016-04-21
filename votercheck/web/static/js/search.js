@@ -16,7 +16,17 @@ var Searcher = function(searchBarElement, callback) {
 
       year: searchBarElement.find('input.year').val(),
       month: searchBarElement.find('select.month').val(),
-      day: searchBarElement.find('input.day').val()
+      day: searchBarElement.find('input.day').val(),
+
+      equals: function(other) {
+        return !!other && this.first == other.first &&
+                this.middle == other.middle &&
+                this.last == other.last &&
+                this.zip == other.zip &&
+                this.year == other.year &&
+                this.month == other.month &&
+                this.day == other.day;
+      }
     };
 
     var errors = [];

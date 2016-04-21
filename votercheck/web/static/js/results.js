@@ -1,10 +1,27 @@
 
 var Results = function(resultsElement) {
   resultsElement.html('');
-  resultsElement.html("<p>Searching...</p>");
+
+  var displayedSearchInfo = null;
+  var displayedResults = null;
+
+  this.getDisplayedSearchInfo = function() {
+    return displayedSearchInfo;
+  };
+
+  this.getDisplayedResults = function() {
+    return displayedResults;
+  };
+
+  this.showSearching = function() {
+    resultsElement.html("<p>Searching...</p>");
+  };
 
   this.showResults = function(resultDatas, searchInfo) {
     resultsElement.html('');
+
+    displayedSearchInfo = searchInfo;
+    displayedResults = resultDatas;
 
     if (!resultDatas.matches) {
       this.showError();
